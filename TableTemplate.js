@@ -1,57 +1,35 @@
-"use strict";
-// Contributer for this code  are Priyanka Mekala  and Anusha Bethini
-(function () {
-  
-    class TableTemplate {
-      static fillIn(tableId, dictionary, columnName) {
-        const table = document.getElementById(tableId);
-  
-        if (!table) {
-          console.error("Table not found.");
-          return;
-        }
-  
-        const headerRow = table.rows[0];
-        const isPartNumberTable = columnName === 'Part Number' && tableId === 'table1';
-  
-        for (let i = 0; i < headerRow.cells.length; i++) {
-          const columnHeader = headerRow.cells[i].textContent.trim();
-          headerRow.cells[i].textContent = this.fillCellTemplate(columnHeader, dictionary, columnHeader, isPartNumberTable);
-        }
-  
-        const columnIndex = columnName ? Array.from(headerRow.cells).findIndex(cell => cell.textContent.trim() === columnName) : -1;
-  
-        for (let i = 1; i < table.rows.length; i++) {
-          const row = table.rows[i];
-  
-          if (columnIndex !== -1) {
-            const cell = row.cells[columnIndex];
-            cell.textContent = this.fillCellTemplate(cell.textContent, dictionary, columnName, false);
-          } else {
-            for (let j = 0; j < row.cells.length; j++) {
-              const cell = row.cells[j];
-              const currentColumnName = headerRow.cells[j].textContent.trim();
-              cell.textContent = this.fillCellTemplate(cell.textContent, dictionary, currentColumnName, isPartNumberTable);
-            }
-          }
-        }
-  
-        table.style.visibility = "visible";
-      }
-  
-      static fillCellTemplate(cellContent, dictionary, columnName, isPartNumberTable) {
-        const regex = /{{(.*?)}}/g;
-  
-        return cellContent.replace(regex, (match, property) => {
-          if (isPartNumberTable && columnName === 'Part Number' && property.startsWith('n')) {
-            return `{{${property}}}`;
-          } else {
-            return dictionary.hasOwnProperty(property) ? dictionary[property] : `{{${property}}}`;
-          }
-        });
+'use strict';
+
+class TableTemplate {
+  static fillIn(id, dict, columnName) {
+    const table = document.getElementById(id);
+    if (!table) return;
+
+    const headers = table.rows[0].cells;
+    let columnIndex =-1;
+    for (let i =0; i < headers.length; i++) {
+      const headerContent = headers[i].innerHTML;
+      const processor = new TemplateProcessor(headerContent);
+      headers[i].innerHTML = processor.fillIn(dict);
+
+      if (headers[i].innerHTML === columnName) {
+        columnIndex = i ;
       }
     }
-  
-    window.TableTemplate = TableTemplate;
-  })();
-  
+
+   for (let rowIndex = 1; rowIndex < table.rows.length;rowIndex++) {
+    const cells = table.rows[rowIndex].cells;
+      for (let cellIndex = 0; cellIndex < cells.length;cellIndex++){
+        if (columnIndex === -1 || columnIndex === cellIndex){
+          const cellContent = cells[cellIndex].innerHTML;
+          const cellProcessor = new TemplateProcessor(cellContent);
+          cells[cellIndex].innerHTML = cellProcessor.fillIn(dict);
+        }
+      }
+   } 
+    
+    if (table.style.visibility === "hidden") {
+      table.style.visibility = "visible";
+    }
+  }
+}
