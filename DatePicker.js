@@ -1,218 +1,131 @@
 'use strict';
 class DatePicker {
-    constructor(id, callbackFunction) {
-      this.id = id;
-      this.callbackFunction = callbackFunction;
-      this.div = document.getElementById(id);
-      this.currentDate = new Date();
-    }
-  
-    render(date, defaultSelectedDate) {
-      this.currentDate = date;
-  
-      // Clear the contents of the div
-      this.div.innerHTML = "";
-  
-      // Create a container for the header and navigation controls
-      const headerContainer = document.createElement("div");
-  
-      // Create the month and year header with navigation controls
-      const monthYearHeader = document.createElement("div");
-      monthYearHeader.classList.add("month-year-header");
-  
-      // Create the previous month button
-      const previousMonthButton = document.createElement("button");
-      previousMonthButton.innerHTML = "&lt;";
-      previousMonthButton.classList.add("nav-button");
-      previousMonthButton.addEventListener("click", () =>
-        this.render(
-          new Date(
-            this.currentDate.getFullYear(),
-            this.currentDate.getMonth() - 1,
-            1
-          )
-        )
-      );
-  
-      // Create the next month button
-      const nextMonthButton = document.createElement("button");
-      nextMonthButton.innerHTML = "&gt;";
-      nextMonthButton.classList.add("nav-button");
-      nextMonthButton.addEventListener("click", () =>
-        this.render(
-          new Date(
-            this.currentDate.getFullYear(),
-            this.currentDate.getMonth() + 1,
-            1
-          )
-        )
-      );
-  
-      // Create the month and year text
-      const monthYearText = document.createElement("span");
-      monthYearText.innerText =
-        this.getMonthName(this.currentDate.getMonth()) +
-        " " +
-        this.currentDate.getFullYear();
-  
-      // Append the previous month button, month name, and next month button to the header
-      monthYearHeader.appendChild(previousMonthButton);
-      monthYearHeader.appendChild(document.createTextNode(" "));
-      monthYearHeader.appendChild(monthYearText);
-      monthYearHeader.appendChild(document.createTextNode(" "));
-      monthYearHeader.appendChild(nextMonthButton);
-  
-      // Append the month and year header to the container
-      headerContainer.appendChild(monthYearHeader);
-  
-      // Append the container to the div
-      this.div.appendChild(headerContainer);
-  
-      // Create the header row
-      const headerRow = document.createElement("tr");
-      for (let i = 0; i < 7; i++) {
-        const headerCell = document.createElement("th");
-        headerCell.innerText = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][i];
-        headerRow.appendChild(headerCell);
-      }
-  
-      // Create the calendar body
-      const calendarBody = document.createElement("tbody");
-      const daysInMonth = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() + 1,
-        0
-      ).getDate();
-      const firstDayOfMonth = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth(),
-        1
-      ).getDay();
-      const lastDayOfMonth = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth() + 1,
-        0
-      ).getDay();
-  
-      let currentWeek = document.createElement("tr"); // Initialize the current week
-  
-      // Add the days of the week leading up to the first day of the month
-      if (firstDayOfMonth > 0) {
-        for (let i = 0; i < firstDayOfMonth; i++) {
-          const calendarCell = document.createElement("td");
-          calendarCell.classList.add("dimmed");
-          const prevMonthDate = new Date(
-            this.currentDate.getFullYear(),
-            this.currentDate.getMonth() - 1,
-            31 - (firstDayOfMonth - i - 1)
-          );
-          calendarCell.innerText = prevMonthDate.getDate();
-          currentWeek.appendChild(calendarCell);
-        }
-      }
-  
-      // Add the days of the month
-      for (let i = 1; i <= daysInMonth; i++) {
-        const calendarCell = document.createElement("td");
-        calendarCell.innerText = i;
-  
-        // Compare to the 'date' parameter, not 'this.currentDate'
-        if (
-          date.getFullYear() === this.currentDate.getFullYear() &&
-          date.getMonth() === this.currentDate.getMonth() &&
-          date.getDate() === i &&
-          date === defaultSelectedDate
-        ) {
-          calendarCell.classList.add("selected");
-        }
-  
-        currentWeek.appendChild(calendarCell);
-  
-        // Start a new row (week) if it's the last day of the week or the last day of the month
-        if (currentWeek.children.length === 7 || i === daysInMonth) {
-          calendarBody.appendChild(currentWeek);
-          currentWeek = document.createElement("tr");
-        }
-      }
-  
-      // Add the days of the week following the last day of the month
-      if (lastDayOfMonth < 6) {
-        for (let i = lastDayOfMonth + 1; i < 7; i++) {
-          const calendarCell = document.createElement("td");
-          calendarCell.classList.add("dimmed");
-          const nextMonthDate = new Date(
-            this.currentDate.getFullYear(),
-            this.currentDate.getMonth() + 1,
-            1 + (i - lastDayOfMonth - 1)
-          );
-          calendarCell.innerText = nextMonthDate.getDate();
-          currentWeek.appendChild(calendarCell);
-        }
-      }
-  
-      // Append the header row and calendar body to the div
-      this.div.appendChild(headerRow);
-      this.div.appendChild(calendarBody);
-  
-          // Add a click listener to each day cell
-      const calendarCells = this.div.querySelectorAll("tbody td");
-      calendarCells.forEach((calendarCell) => {
-        calendarCell.addEventListener("click", () => {
-          // Check if the clicked cell is dimmed (from the previous month)
-          if (calendarCell.classList.contains("dimmed")) {
-            return; // Do nothing for dimmed cells
-          }
-  
-          // Remove the "selected" class from all date cells
-          calendarCells.forEach((cell) => {
-            cell.classList.remove("selected");
-          });
-  
-          // Add the "selected" class to the clicked cell
-          calendarCell.classList.add("selected");
-  
-          // Extract the selected date from the clicked cell
-          const day = parseInt(calendarCell.innerText);
-          const month = this.currentDate.getMonth() + 1; // Adjust month to be 1-based
-          const year = this.currentDate.getFullYear();
-  
-          // Invoke the callback function with the selected date
-          this.callbackFunction(this.id, { day, month, year });
-        });
-      });
-  
-      // Highlight the defaultSelectedDate if provided
-      if (defaultSelectedDate) {
-        const { day, month, year } = defaultSelectedDate;
-        const selectedCell = Array.from(calendarCells).find(
-          (cell) =>
-            parseInt(cell.innerText) === day &&
-            this.currentDate.getMonth() + 1 === month &&
-            this.currentDate.getFullYear() === year
-        );
-        if (selectedCell) {
-          selectedCell.classList.add("selected");
-        }
-      }
-    }
-  
-    getMonthName(monthIndex) {
-      const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-  
-      return monthNames[monthIndex];
-    }
+  constructor(id, callback) {
+    this.id = id;
+    this.callback = callback;
+    this.currentDate = new Date();
+    this.render(this.currentDate);
   }
-  
+
+  render(selectedDate) {
+    const container = document.getElementById(this.id);
+    container.innerHTML = ''; // Clear previous content
+
+    const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    var year = selectedDate.getFullYear();
+    var month = selectedDate.getMonth();
+    const selectedDay = selectedDate.getDate();
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
+    const daysInMonth = lastDayOfMonth.getDate();
+    const startingDay = firstDayOfMonth.getDay(); // 0-based index of first day of month
+
+    const table = document.createElement('table');
+    table.style.backgroundColor = '#4169E1'; // Set table background color to light gray
+    const caption = document.createElement('caption');
+    caption.textContent = `${monthNames[month]} ${year}`;
+    table.appendChild(caption);
+
+    // Create navigation controls
+    const navRow = document.createElement('tr');
+    const navCell = document.createElement('td');
+    navCell.setAttribute('colspan', '7');
+
+    const prevButton = document.createElement('button');
+    prevButton.textContent = '<';
+    prevButton.className = 'nav-button';
+    prevButton.style.padding = '5px 10px'; // Added padding
+    prevButton.addEventListener('click', () => {
+        month -= 1;
+        if (month < 0) {
+            month = 11;
+            year -= 1;
+        }
+        this.render(new Date(year, month, 1));
+    });
+
+    const nextButton = document.createElement('button');
+    nextButton.textContent = '>';
+    nextButton.className = 'nav-button';
+    nextButton.style.padding = '5px 10px'; // Added padding
+    nextButton.addEventListener('click', () => {
+        month += 1;
+        if (month > 11) {
+            month = 0;
+            year += 1;
+        }
+        this.render(new Date(year, month, 1));
+    });
+
+    navCell.appendChild(prevButton);
+    navCell.appendChild(nextButton);
+    navRow.appendChild(navCell);
+    table.appendChild(navRow);
+
+    // Create header row with abbreviations for days of the week
+    const headerRow = document.createElement('tr');
+    for (const day of daysOfWeek) {
+        const th = document.createElement('th');
+        th.textContent = day;
+        headerRow.appendChild(th);
+    }
+    table.appendChild(headerRow);
+
+    // Create calendar cells
+    let currentDate = 1;
+    const weeksInMonth = Math.ceil((startingDay + daysInMonth) / 7);
+    var month1=month;
+    var year1=year;
+    for (let i = 0; i < weeksInMonth; i++) {
+        const weekRow = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+            if ((i === 0 && j >= startingDay) || (i > 0 && currentDate <= daysInMonth)) {
+                cell.textContent = currentDate;
+                if (currentDate === selectedDay) {
+                    cell.classList.add('selected');
+                }
+                cell.addEventListener('click', (event) => {
+                    const clickedDate = parseInt(event.target.textContent,10);
+                    this.callback(this.id, { month1: month1 + 1, day: clickedDate, year1 });
+                    // Remove highlight from previously selected date
+                    table.querySelectorAll('.selected').forEach((selectedCell) => {
+                        selectedCell.classList.remove('selected');
+                    });
+                    // Highlight newly selected date
+                    event.target.classList.add('selected');
+                });
+                currentDate++;
+            } else {
+                const daysFromPrevMonth = (7 * i + j + 1) - startingDay;
+                if (daysFromPrevMonth <= 0) {
+                    const prevMonthLastDay = new Date(year, month, 0).getDate();
+                    cell.textContent = prevMonthLastDay + daysFromPrevMonth;
+                } else if (daysFromPrevMonth > daysInMonth) {
+                    cell.textContent = daysFromPrevMonth - daysInMonth;
+                } else {
+                    cell.textContent = daysFromPrevMonth;
+                }
+                cell.classList.add('other-month');
+            }
+            weekRow.appendChild(cell);
+        }
+        table.appendChild(weekRow);
+    }
+
+    container.appendChild(table);
+}
+
+
+
+
+
+
+
+
+}

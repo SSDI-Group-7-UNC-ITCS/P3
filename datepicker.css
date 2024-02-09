@@ -1,165 +1,113 @@
+/* Additional styling for the date pickers */
 body {
-    font-family: sans-serif;
-    background-color: #4397CD;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1 {
-    text-align: center;
-    color: #F2F3E1;
-    margin-top: 20px;
-  }
-  
-  .datepicker {
-      width: 300px;
-      margin: 0 auto;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      background-color: #F2F3E1; /* Add your desired background color here */
-      color: #333;
-    }
-    
-  
-  .month-year-header {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #0F4C74;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th {
-    background-color: #333;
-    color: #fff;
-    font-weight: bold;
-    padding: 10px;
-  }
-  
-  td.dimmed {
-    color: #ccc;
-  }
-  
-  /* Style the selected date */
-  .datepicker td.selected {
-    background-color: #333;
-    color: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  /* Style for the selected date on hover */
-  .datepicker td.selected:hover {
-    background-color: #333 !important;
-  }
-  
-  /* Add hover effect for all date cells */
-  .datepicker td:not(.dimmed):hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  /* Style for the header cells */
-  .datepicker thead th {
-    text-align: center;
-    padding: 10px;
-    background-color: #f0f0f0;
-  }
-  
-  /* Style for the date cells */
-  .datepicker tbody td {
-    width: 14.28%;
-    text-align: center;
-    padding: 10px;
-  }
-  
-  /* Container for the calendar */
-  .datepicker table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  /* Month and year header */
-  .month-year-header {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  
-  /* Reset the default border radius on the datepicker */
-  .datepicker {
-    border-radius: 0;
-  }
-  
-  /* Add some padding to the month and year header */
-  .month-year-header {
-    padding: 10px;
-  }
-  
-  /* Increase the font size of the date cells */
-  .datepicker tbody td {
-    font-size: 16px;
-  }
-  
-  /* Add a border to the date cells */
-  .datepicker tbody td {
-    border: 1px solid #ccc;
-  }
-  
-  /* Add a bottom border to the header row */
-  .datepicker thead th {
-    border-bottom: 1px solid #ccc;
-  }
-  
-  /* Add a hover effect for the header cells */
-  .datepicker thead th:hover {
-    background-color: #f5f5f5;
-  }
-  
-  /* Add a focus effect for the date cells */
-  .datepicker tbody td:focus {
-    outline: 2px solid #0F4C74;
-  }
-  /* Add styling for the navigation buttons */
-  .nav-button {
-      background-color: #0F4C74;
-      color: #fff;
-      font-size: 18px;
-      width: 30px;
-      height: 30px;
-      border: none;
-      border-radius: 100%;
-      cursor: pointer;
-      margin: 0 5px;
-      transition: background-color 0.2s, color 0.2s;
-  }
-  
-  /* Style the navigation buttons on hover */
-  .nav-button:hover {
-      background-color: #0F4C74;
-      color: #fff;
-  }
-  .datepicker .month-year-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .datepicker .previousMonthButton, .datepicker .nextMonthButton {
-      margin: 0 10px;
-    }
-    
-  
-    
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Updated font stack */
+  background-color: #B0E0E6; /* Light gray background */
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #333; /* Dark gray header color */
+  margin-top: 20px;
+}
+
+#datepicker1,
+#datepicker2 {
+  margin: 20px auto;
+  width: 300px;
+  text-align: center;
+}
+
+.datepicker {
+  margin-top: 10px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 10px;
+}
+
+.month-year-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333; /* Dark gray header color */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f0f0f0; /* Light gray header background */
+  color: #333; /* Dark gray header color */
+  font-weight: bold;
+}
+
+td.dimmed {
+  color: #ccc; /* Light gray dimmed text color */
+}
+
+td.selected {
+  background-color: #3498db; /* Blue selected date background */
+  color: #fff; /* White text color */
+  border-radius: 50%; /* Rounded border */
+  cursor: pointer;
+}
+
+td.selected:hover {
+  background-color: #2186c4; /* Darker blue on hover */
+}
+
+td:not(.dimmed):hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+  cursor: pointer;
+}
+
+.nav-button {
+  background-color: #3498db; /* Blue navigation buttons */
+  color: #fff; /* White text color */
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 100%; /* Circular button */
+  cursor: pointer;
+  margin: 0 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-button:hover {
+  background-color: #2186c4; /* Darker blue on hover */
+}
+
+.month-year-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.previousMonthButton,
+.nextMonthButton {
+  margin: 0 10px;
+}
+
+/* Style for the selected date */
+.selected {
+  background-color: #3498db; /* Blue selected date background */
+  color: #fff; /* White text color */
+  border-radius: 50%; /* Rounded border */
+}
+
+/* Style for days not in the current month */
+.other-month {
+  color: #ccc; /* Light gray dimmed text color */
+}
