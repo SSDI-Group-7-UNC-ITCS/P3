@@ -79,8 +79,8 @@ class DatePicker {
     // Create calendar cells
     let currentDate = 1;
     const weeksInMonth = Math.ceil((startingDay + daysInMonth) / 7);
-    var month1=month;
-    var year1=year;
+    var month=month;
+    var year=year;
     for (let i = 0; i < weeksInMonth; i++) {
         const weekRow = document.createElement('tr');
         for (let j = 0; j < 7; j++) {
@@ -92,7 +92,7 @@ class DatePicker {
                 }
                 cell.addEventListener('click', (event) => {
                     const clickedDate = parseInt(event.target.textContent,10);
-                    this.callback(this.id, { month1: month1 + 1, day: clickedDate, year1 });
+                    this.callback(this.id, { month: month + 1, day: clickedDate, year });
                     // Remove highlight from previously selected date
                     table.querySelectorAll('.selected').forEach((selectedCell) => {
                         selectedCell.classList.remove('selected');
