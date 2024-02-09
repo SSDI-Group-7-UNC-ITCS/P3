@@ -1,5 +1,5 @@
 "use strict";
-// contributer for this code  are Mekala Priyanka and Anusha Bethini
+// Contributer for this code  are Priyanka Mekala  and Anusha Bethini
 (function () {
   
     class TableTemplate {
